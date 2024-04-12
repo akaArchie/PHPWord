@@ -153,7 +153,7 @@ class Chart extends AbstractPart
         if ($showLegend) {
             $xmlWriter->writeRaw('<c:legend><c:legendPos val="' . $legendPosition . '"/></c:legend>');
         }
-
+        $xmlWriter->writeElementBlock('c:dispBlanksAs', 'val', 'gap');
         $xmlWriter->startElement('c:plotArea');
         $xmlWriter->writeElement('c:layout');
 
@@ -311,16 +311,18 @@ class Chart extends AbstractPart
 
         $index = 0;
         foreach ($values as $value) {
-            $xmlWriter->startElement('c:pt');
-            $xmlWriter->writeAttribute('idx', $index);
-            if (\PhpOffice\PhpWord\Settings::isOutputEscapingEnabled()) {
-                $xmlWriter->writeElement('c:v', $value);
-            } else {
-                $xmlWriter->startElement('c:v');
-                $xmlWriter->writeRaw($value);
-                $xmlWriter->endElement(); // c:v
+            if ($value !== null) {
+                $xmlWriter->startElement('c:pt');
+                    $xmlWriter->writeAttribute('idx', $index);
+                    if (\PhpOffice\PhpWord\Settings::isOutputEscapingEnabled()) {
+                    $xmlWriter->writeElement('c:v', $value);
+                } else {
+                    $xmlWriter->startElement('c:v');
+                    $xmlWriter->writeRaw($value);
+                    $xmlWriter->endElement(); // c:v
+                }
+                $xmlWriter->endElement(); // c:pt
             }
-            $xmlWriter->endElement(); // c:pt
             ++$index;
         }
 
