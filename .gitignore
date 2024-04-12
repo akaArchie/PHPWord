@@ -22,3 +22,4 @@ phpword.ini
 /.php_cs.cache
 /.phpunit.result.cache
 /public
+/.vscode
